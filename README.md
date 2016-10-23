@@ -14,7 +14,7 @@ Tapsuite has a peer dependency on node-tap, which must be installed alongside.
 
 ## Usage
 
-```
+```js
 var suite = require('tapsuite');
 
 suite('this is a suite of tests', (s) => {
