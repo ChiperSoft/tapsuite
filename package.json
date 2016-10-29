@@ -1,6 +1,6 @@
 {
   "name": "tapsuite",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A node-tap helper for creating test suites",
   "main": "index.js",
   "scripts": {
