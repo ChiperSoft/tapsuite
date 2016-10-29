@@ -33,7 +33,7 @@
     "bluebird": "3.x"
   },
   "peerDependencies": {
-    "tap": "7.x"
+    "tap": ">= 7.0"
   },
   "devDependencies": {
     "eslint": "~3.9.0",
