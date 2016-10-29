@@ -1,5 +1,6 @@
 
 var suite = require('../');
+var Promise = require('bluebird');
 var stepper = require('stepperbox')();
 var assert = require('assert');
 
@@ -38,5 +39,9 @@ suite('test A', (s) => {
 	s.test('test3', stepper.as('test3'));
 
 }).then((result) => {
+	assert(result);
 	assert.equal(stepper.getStep(), 5, 'not all steps were called');
-})
+}, (err) => {
+	console.error(err);
+	process.exit(1);
+});

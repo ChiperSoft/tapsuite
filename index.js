@@ -6,10 +6,10 @@ var tap = require('tap');
 var Test = tap.Test;
 
 module.exports = exports = function suite (name, extra, cb) {
-	var args = Test.prototype._parseTestArgs(name, extra, cb);
-	name = args[0];
-	extra = args[1];
-	cb = args[2];
+	var fargs = Test.prototype._parseTestArgs(name, extra, cb);
+	name = fargs[0];
+	extra = fargs[1];
+	cb = fargs[2];
 
 	var tests = [];
 	var only = null;
@@ -64,7 +64,7 @@ module.exports = exports = function suite (name, extra, cb) {
 				failure = fn;
 			},
 
-			harness: tHarness
+			harness: tHarness,
 		};
 
 		cb(harness);
@@ -73,12 +73,12 @@ module.exports = exports = function suite (name, extra, cb) {
 			.then(() => {
 				if (only) {
 					return Promise.resolve(tHarness.test.apply(tHarness, only))
-						.catch((err) => fromCallbackOrPromise(failure));
+						.catch((err) => fromCallbackOrPromise(failure, err));
 				}
 
 				var pTests = tests.map((args) =>
 					Promise.resolve(tHarness.test.apply(tHarness, args))
-						.catch((err) => fromCallbackOrPromise(failure))
+						.catch((err) => fromCallbackOrPromise(failure, err))
 				);
 
 				return Promise.all(pTests);
@@ -87,10 +87,13 @@ module.exports = exports = function suite (name, extra, cb) {
 	});
 };
 
-function fromCallbackOrPromise (fn) {
+function fromCallbackOrPromise () {
+	var args = Array.from(arguments);
+	var fn = args.shift();
 	if (typeof fn !== 'function') return Promise.resolve();
 	return Promise.fromCallback((cb) => {
-		var ret = fn(cb);
+		args.push(cb);
+		var ret = fn.apply(null, args);
 		if (ret && typeof ret.then === 'function') {
 			Promise.resolve(ret).asCallback(cb);
 		} else if (fn.length === 0) {

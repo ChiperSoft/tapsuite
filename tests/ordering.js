@@ -1,5 +1,6 @@
 
 var suite = require('../');
+var Promise = require('bluebird');
 var stepper = require('stepperbox')();
 var assert = require('assert');
 
@@ -9,7 +10,7 @@ stepper.add((method) => {
 });
 stepper.add((method, cb) => {
 	assert.equal(method, 'beforeEach');
-	cb()
+	cb();
 });
 stepper.add((method) => {
 	assert.equal(method, 'test1');
@@ -49,5 +50,9 @@ suite('test A', (s) => {
 	s.test('test2', stepper.as('test2'));
 
 }).then((result) => {
+	assert(result);
 	assert.equal(stepper.getStep(), 8, 'not all steps were called');
-})
+}, (err) => {
+	console.error(err);
+	process.exit(1);
+});
