@@ -1,8 +1,14 @@
 # tapsuite
-===
-A tool for creating suites of tests for node-tap.
 
-Allows for creation of a suite of subtests in a file with dedicated pre-suite and post-suite behavior, as well as providing `t.only`, `t.skip` and `t.todo` functions for easier test development.
+A tool for creation of a suite of node-tap subtests in a file with dedicated pre-suite and post-suite behavior, as well as providing `t.only`, `t.skip` and `t.todo` functions for easier test development.
+
+[![NPM version](https://img.shields.io/npm/v/tapsuite.svg)](http://badge.fury.io/js/tapsuite)
+[![Licensed MIT](https://img.shields.io/npm/l/tapsuite.svg)](https://github.com/ChiperSoft/tapsuite/blob/master/LICENSE.txt)
+[![Nodejs 4+](https://img.shields.io/badge/node.js-%3E=_4 LTS-brightgreen.svg)](http://nodejs.org)
+[![Downloads](http://img.shields.io/npm/dm/tapsuite.svg)](http://npmjs.org/tapsuite)
+[![Build Status](https://img.shields.io/travis/ChiperSoft/tapsuite.svg)](https://travis-ci.org/ChiperSoft/tapsuite)
+
+
 
 ## Installation
 
