@@ -57,6 +57,7 @@ module.exports = exports = function suite (name, extra, cb) {
 				after = fn;
 			},
 
+			comment:    tHarness.comment.bind(tHarness),
 			beforeEach: tHarness.beforeEach.bind(tHarness),
 			afterEach:  tHarness.afterEach.bind(tHarness),
 
