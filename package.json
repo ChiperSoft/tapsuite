@@ -36,7 +36,7 @@
     "tap": ">= 7.0"
   },
   "devDependencies": {
-    "eslint": "~3.10.0",
+    "eslint": "~3.11.0",
     "eslint-config-chiper": "~2.1.0",
     "eslint-plugin-node": "~3.0.0",
     "eslint-plugin-promise": "~3.3.0",
