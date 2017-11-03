@@ -20,14 +20,14 @@
     "test",
     "testing"
   ],
-  "author": "Jarvis Badgley <chiper@chipersoft.com> (http://chipersoft.com/)",
+  "author": "Jocelyn Badgley <joc@twipped.com>",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ChiperSoft/tapsuite.git"
+    "url": "https://github.com/Twipped/tapsuite.git"
   },
   "bugs": {
-    "url": "https://github.com/ChiperSoft/tapsuite/issues"
+    "url": "https://github.com/Twipped/tapsuite/issues"
   },
   "dependencies": {
     "bluebird": "~3.5.1"
