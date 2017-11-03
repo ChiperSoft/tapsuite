@@ -5,8 +5,40 @@ var Promise = require('bluebird');
 var tap = require('tap');
 var Test = tap.Test;
 
+function parseTestArgs (name, extra, cb) {
+	if (typeof name === 'function') {
+		cb = name;
+		name = '';
+		extra = {};
+	} else if (typeof name === 'object') {
+		cb = extra;
+		extra = name;
+		name = '';
+	} else if (typeof extra === 'function') {
+		cb = extra;
+		extra = {};
+	}
+
+	if (!extra) {
+		extra = {};
+	}
+
+	if (!cb) {
+		extra.todo = true;
+	} else if (typeof cb !== 'function') {
+		throw new TypeError('test() callback must be function if provided');
+	}
+
+	if (!name && cb && cb.name) {
+		name = cb.name;
+	}
+
+	name = name || '(unnamed test)';
+	return [ name, extra, cb ];
+}
+
 module.exports = exports = function suite (name, extra, cb) {
-	var fargs = Test.prototype._parseTestArgs(name, extra, cb);
+	var fargs = parseTestArgs(name, extra, cb);
 	name = fargs[0];
 	extra = fargs[1];
 	cb = fargs[2];
@@ -24,7 +56,7 @@ module.exports = exports = function suite (name, extra, cb) {
 			},
 
 			skip (n, e, c) {
-				var args = Test.prototype._parseTestArgs(n, e, c);
+				var args = parseTestArgs(n, e, c);
 				n = args[0];
 				e = args[1];
 				c = args[2];
@@ -35,7 +67,7 @@ module.exports = exports = function suite (name, extra, cb) {
 			},
 
 			todo (n, e, c) {
-				var args = Test.prototype._parseTestArgs(n, e, c);
+				var args = parseTestArgs(n, e, c);
 				n = args[0];
 				e = args[1];
 				c = args[2];
