@@ -3,7 +3,6 @@
 
 var Promise = require('bluebird');
 var tap = require('tap');
-var Test = tap.Test;
 
 function parseTestArgs (name, extra, cb) {
 	if (typeof name === 'function') {
