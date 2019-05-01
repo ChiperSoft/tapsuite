@@ -5,11 +5,11 @@
   "main": "index.js",
   "scripts": {
     "test": "tap tests",
-    "test:travis": "npm run lint && npm run test",
-    "lint": "eslint ./"
+    "test:travis": "eslint ./ && npm run test",
+    "lint": "eslint ./ --fix"
   },
   "engines": {
-    "node": ">=4.2.0"
+    "node": ">=8.12.0"
   },
   "keywords": [
     "tap",
@@ -29,9 +29,7 @@
   "bugs": {
     "url": "https://github.com/Twipped/tapsuite/issues"
   },
-  "dependencies": {
-    "bluebird": "~3.5.1"
-  },
+  "dependencies": {},
   "peerDependencies": {
     "tap": ">= 12.0"
   },
