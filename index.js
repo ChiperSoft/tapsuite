@@ -1,7 +1,3 @@
-/* eslint consistent-this:0, prefer-rest-params:0, prefer-spread:0 */
-'use strict';
-
-var Promise = require('bluebird');
 var tap = require('tap');
 
 function parseTestArgs (name, extra, cb) {
@@ -48,10 +44,10 @@ module.exports = exports = function suite (name, extra, cb) {
 	var after = (done) => done();
 	var failure = (done) => done();
 
-	return tap.test(name, extra, (tHarness) => {
+	return tap.test(name, extra, async (tHarness) => {
 		var harness = {
-			test () {
-				tests.push(Array.from(arguments));
+			test (...args) {
+				tests.push(args);
 			},
 
 			skip (n, e, c) {
@@ -76,8 +72,8 @@ module.exports = exports = function suite (name, extra, cb) {
 				tests.push([ n, e, c ]);
 			},
 
-			only () {
-				only = Array.from(arguments);
+			only (...args) {
+				only = args;
 			},
 
 			before (fn) {
@@ -101,33 +97,49 @@ module.exports = exports = function suite (name, extra, cb) {
 
 		cb(harness);
 
-		return fromCallbackOrPromise(before)
-			.then(() => {
-				if (only) {
-					return Promise.resolve(tHarness.test.apply(tHarness, only))
-						.catch((err) => fromCallbackOrPromise(failure, err));
+		await fromCallbackOrPromise(before);
+
+		if (only) {
+			try {
+				await tHarness.test(...only);
+			} catch (err) {
+				await fromCallbackOrPromise(failure, err);
+			}
+		} else {
+			for (const testArgs of tests) {
+				try {
+					await tHarness.test(...testArgs);
+				} catch (err) {
+					await fromCallbackOrPromise(failure, err);
 				}
+			}
+		}
 
-				var pTests = tests.map((args) =>
-					Promise.resolve(tHarness.test.apply(tHarness, args))
-						.catch((err) => fromCallbackOrPromise(failure, err))
-				);
-
-				return Promise.all(pTests);
-			})
-			.then(() => fromCallbackOrPromise(after));
+		await fromCallbackOrPromise(after);
 	});
 };
 
-function fromCallbackOrPromise () {
-	var args = Array.from(arguments);
-	var fn = args.shift();
+function fromCallback (func) {
+	return new Promise((resolve, reject) => {
+		const cb = (err, result) => {
+			if (err) reject();
+			else resolve(result);
+		};
+		try {
+			func(cb);
+		} catch (e) {
+			reject(e);
+		}
+	});
+}
+
+function fromCallbackOrPromise (fn, ...args) {
 	if (typeof fn !== 'function') return Promise.resolve();
-	return Promise.fromCallback((cb) => {
+	return fromCallback((cb) => {
 		args.push(cb);
-		var ret = fn.apply(null, args);
+		var ret = fn(...args);
 		if (ret && typeof ret.then === 'function') {
-			Promise.resolve(ret).asCallback(cb);
+			Promise.resolve(ret).then((r) => cb(null, r), cb);
 		} else if (fn.length === 0) {
 			// function doesn't support a callback and didn't
 			// return a promise, so assume sync

@@ -1,7 +1,9 @@
-
+/* eslint no-unreachable:0 */
 var suite = require('../');
 var stepper = require('stepperbox')();
 var assert = require('assert');
+
+return; // remove this to run the test
 
 stepper.add((method) => {
 	assert.strictEqual(method, 'before');
@@ -19,6 +21,16 @@ stepper.add((method) => {
 	assert.strictEqual(method, 'afterEach');
 	return Promise.resolve();
 });
+
+stepper.add((method, cb) => {
+	assert.strictEqual(method, 'beforeEach');
+	cb();
+});
+stepper.add((method) => {
+	assert.strictEqual(method, 'afterEach');
+	return Promise.resolve();
+});
+
 stepper.add((method) => {
 	assert.strictEqual(method, 'beforeEach');
 	return Promise.resolve();
@@ -31,10 +43,12 @@ stepper.add((method) => {
 	assert.strictEqual(method, 'afterEach');
 	return Promise.resolve();
 });
+
 stepper.add((method, cb) => {
 	assert.strictEqual(method, 'after');
 	cb();
 });
+
 
 suite('test A', (s) => {
 
@@ -44,14 +58,16 @@ suite('test A', (s) => {
 	s.afterEach(stepper.as('afterEach'));
 
 	s.test('test1', stepper.as('test1'));
-	s.skip('skipped', stepper.as('skipped'));
-	s.todo('todo', stepper.as('todo'));
+	s.test('failure', async () => { throw new Error('This test fails'); });
 	s.test('test2', stepper.as('test2'));
 
-}).then((result) => {
-	assert(result);
-	assert.strictEqual(stepper.getStep(), 8, 'not all steps were called');
-}, (err) => {
-	console.error(err);
-	process.exit(1);
-});
+})
+	.catch(stepper.as('tapFailed'))
+	.then((result) => {
+		assert(result);
+		assert.strictEqual(stepper.getStep(), 10, 'not all steps were called');
+	})
+	.catch((err) => {
+		console.error(err);
+		process.exit(1);
+	});
