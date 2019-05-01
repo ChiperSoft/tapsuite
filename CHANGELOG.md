@@ -1,4 +1,4 @@
-2.0.0 / 2019-05-01
+2.0.1 / 2019-05-01
 ==================
 
   * Updated for node-tap 13. Now ensures that tests will always run in sequence

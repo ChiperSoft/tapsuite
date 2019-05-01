@@ -48,10 +48,12 @@ suite('test A', (s) => {
 	s.todo('todo', stepper.as('todo'));
 	s.test('test2', stepper.as('test2'));
 
-}).then((result) => {
-	assert(result);
-	assert.strictEqual(stepper.getStep(), 8, 'not all steps were called');
-}, (err) => {
-	console.error(err);
-	process.exit(1);
-});
+})
+	.then((result) => {
+		assert(result);
+		assert.strictEqual(stepper.getStep(), 8, 'not all steps were called');
+	})
+	.catch((err) => {
+		console.error(err);
+		process.exit(1);
+	});

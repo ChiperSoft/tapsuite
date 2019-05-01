@@ -37,10 +37,12 @@ suite('test A', (s) => {
 	s.only('test2', stepper.as('test2'));
 	s.test('test3', stepper.as('test3'));
 
-}).then((result) => {
-	assert(result);
-	assert.strictEqual(stepper.getStep(), 5, 'not all steps were called');
-}, (err) => {
-	console.error(err);
-	process.exit(1);
-});
+})
+	.then((result) => {
+		assert(result);
+		assert.strictEqual(stepper.getStep(), 5, 'not all steps were called');
+	})
+	.catch((err) => {
+		console.error(err);
+		process.exit(1);
+	});

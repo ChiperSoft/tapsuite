@@ -122,7 +122,7 @@ module.exports = exports = function suite (name, extra, cb) {
 function fromCallback (func) {
 	return new Promise((resolve, reject) => {
 		const cb = (err, result) => {
-			if (err) reject();
+			if (err) reject(err);
 			else resolve(result);
 		};
 		try {
